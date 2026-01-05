@@ -101,7 +101,6 @@ function Funcionarios() {
     if (window.confirm("Deseja realmente demitir este funcionário?")) {
       try {
         await api.patch(`/funcionarios/${id}/inativar`);
-        console.error("Id funcionario: ", id );
         fetchFuncionarios();
       } catch (error) {
         console.error("Erro ao demitir funcionário", error);
