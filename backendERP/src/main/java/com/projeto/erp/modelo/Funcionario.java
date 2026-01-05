@@ -86,6 +86,11 @@ public class Funcionario {
         this.dataDemissao = Objects.requireNonNull(dataDemissao);
     }
 
+    public void ligar(LocalDate dataDemissao) {
+        this.status = Status.ATIVO;
+        this.dataDemissao = null;
+    }
+
     public void alterarCargo(Cargo cargo) {
         this.cargo = Objects.requireNonNull(cargo);
     }

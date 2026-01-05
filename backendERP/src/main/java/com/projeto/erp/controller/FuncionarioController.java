@@ -56,6 +56,12 @@ public class FuncionarioController {
         service.inativar(id);
     }
 
+    @PreAuthorize("hasAuthority('FUNCIONARIO_ADMIN')")
+    @PatchMapping("/{id}/ativar")
+    public void ativar(@PathVariable Long id) {
+        service.ativar(id);
+    }
+
     @PreAuthorize("hasAuthority('FUNCIONARIO_READ')")
     @GetMapping("/departamento/{departamentoId}")
     public ResponseEntity<List<FuncionarioDTOResponse>> listarPorDepartamento(@PathVariable Long departamentoId) {

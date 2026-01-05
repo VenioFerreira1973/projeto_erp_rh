@@ -155,5 +155,18 @@ public class FuncionarioService {
         repository.save(funcionario);
     }
 
+    @Transactional
+    public void ativar(Long id) {
+        Funcionario funcionario = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado"));
+
+        funcionario.ligar(LocalDate.now());
+
+        if (funcionario.getUsuario() != null) {
+            funcionario.getUsuario().ativar();
+        }
+
+        repository.save(funcionario);
+    }
 
 }
