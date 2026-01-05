@@ -50,6 +50,12 @@ public class FuncionarioController {
         service.deletar(id);
     }
 
+    @PreAuthorize("hasAuthority('FUNCIONARIO_ADMIN')")
+    @PatchMapping("/{id}/inativar")
+    public void inativar(@PathVariable Long id) {
+        service.inativar(id);
+    }
+
     @PreAuthorize("hasAuthority('FUNCIONARIO_READ')")
     @GetMapping("/departamento/{departamentoId}")
     public ResponseEntity<List<FuncionarioDTOResponse>> listarPorDepartamento(@PathVariable Long departamentoId) {

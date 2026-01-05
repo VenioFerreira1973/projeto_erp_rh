@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -139,5 +140,20 @@ public class FuncionarioService {
         return repository.findByGerenteTrue()
                 .stream().map(mapper::toResponse).toList();
     }
+
+    @Transactional
+    public void inativar(Long id) {
+        Funcionario funcionario = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado"));
+
+        funcionario.desligar(LocalDate.now());
+
+        if (funcionario.getUsuario() != null) {
+            funcionario.getUsuario().desativar();
+        }
+
+        repository.save(funcionario);
+    }
+
 
 }

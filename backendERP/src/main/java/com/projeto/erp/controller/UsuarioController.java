@@ -21,26 +21,26 @@ public class UsuarioController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAuthority('USUARIO_VIEW')")
+    @PreAuthorize("hasAuthority('USUARIO_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UsuarioDTOResponse>> listar(){
         return ResponseEntity.ok(service.listar());
     }
 
-    @PreAuthorize("hasAuthority('USUARIO_VIEW')")
+    @PreAuthorize("hasAuthority('USUARIO_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTOResponse> obter(@PathVariable Long id) {
         return ResponseEntity.ok(service.obter(id));
     }
 
-    @PreAuthorize("hasAuthority('USUARIO_CREATE')")
+    @PreAuthorize("hasAuthority('USUARIO_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioDTOResponse cadastrar(@RequestBody UsuarioDTORequest dto) {
         return service.cadastrar(dto);
     }
 
-    @PreAuthorize("hasAuthority('USUARIO_UPDATE')")
+    @PreAuthorize("hasAuthority('USUARIO_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTOResponse> atualizar(
             @PathVariable Long id,
@@ -49,7 +49,7 @@ public class UsuarioController {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
-    @PreAuthorize("hasAuthority('USUARIO_DELETE')")
+    @PreAuthorize("hasAuthority('USUARIO_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         service.deletar(id);

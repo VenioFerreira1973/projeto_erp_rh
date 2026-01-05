@@ -98,12 +98,13 @@ function Funcionarios() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Deseja realmente excluir este funcionário?")) {
+    if (window.confirm("Deseja realmente demitir este funcionário?")) {
       try {
-        await api.delete(`/funcionarios/${id}`);
+        await api.patch(`/funcionarios/${id}/inativar`);
+        console.error("Id funcionario: ", id );
         fetchFuncionarios();
       } catch (error) {
-        console.error("Erro ao excluir funcionário", error);
+        console.error("Erro ao demitir funcionário", error);
       }
     }
   };
@@ -112,14 +113,9 @@ function Funcionarios() {
     return <div>Carregando...</div>;
   }
 
-  console.log("USUÁRIO LOGADO:", user);
-
   const canRead = permissions.funcionario.read(user);
   const canWrite = permissions.funcionario.write(user);
   const canAdmin = permissions.funcionario.admin(user);
-
-  console.log("Permissões usuário:", user?.permissoes);
-  console.log({ canRead, canWrite, canAdmin });
 
   if (!canRead) {
     return (

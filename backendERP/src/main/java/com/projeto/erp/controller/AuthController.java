@@ -37,7 +37,7 @@ public class AuthController {
         Usuario usuario = usuarioRepository.findByLoginWithPerfisAndPermissoes(loginDTO.login())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        if (!passwordEncoder.matches(loginDTO.senha(), usuario.getSenha())) {
+        if (!passwordEncoder.matches(loginDTO.senha(), usuario.getSenha()) || !usuario.isAtivo()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
