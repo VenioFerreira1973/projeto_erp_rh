@@ -1,10 +1,13 @@
 package com.projeto.erp.dtos;
 
+import com.projeto.erp.enumeracoes.UsuarioStatus;
+
 import java.util.List;
 
 public record UsuarioSecurityDTO(
         String login,
         String senha,
-        boolean ativo,
-        List<PermissaoDTO> permissoes
+        UsuarioStatus status,
+        List<PermissaoDTO> permissoes,
+        boolean primeiroAcesso
 ) {}

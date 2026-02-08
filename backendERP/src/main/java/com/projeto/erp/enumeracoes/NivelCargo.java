@@ -1,0 +1,5 @@
+package com.projeto.erp.enumeracoes;
+
+public enum NivelCargo {
+    ESTAGIARIO, TRAINEE, JUNIOR1, JUNIOR2, JUNIOR3, PLENO1, PLENO2, PLENO3, SENIOR1, SENIOR2, SENIOR3, ESPECIALISTA
+}

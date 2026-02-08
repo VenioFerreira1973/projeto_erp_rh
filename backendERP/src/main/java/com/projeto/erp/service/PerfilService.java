@@ -6,6 +6,7 @@ import com.projeto.erp.modelo.Perfil;
 import com.projeto.erp.repository.PerfilRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PerfilService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public List<PerfilDTO> listar(){
         List<Perfil> perfis = repository.findAll();
 
@@ -35,6 +37,7 @@ public class PerfilService {
 
     }
 
+    @Transactional
     public PerfilDTO obter(Long id) {
 
         Optional<Perfil> optionalPerfil = repository.findById(id);
@@ -47,12 +50,14 @@ public class PerfilService {
         return mapper.toDTO(perfil);
     }
 
+    @Transactional
     public PerfilDTO cadastrar(PerfilDTO dto) {
         Perfil perfil = mapper.toEntity(dto);
         Perfil salvo = repository.save(perfil);
         return mapper.toDTO(salvo);
     }
 
+    @Transactional
     public PerfilDTO atualizar(Long id, PerfilDTO dto) {
 
         Perfil perfilExistente = repository.findById(id)
@@ -65,11 +70,5 @@ public class PerfilService {
         return mapper.toDTO(salvo);
     }
 
-    public void deletar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Perfil não encontrado");
-        }
-        repository.deleteById(id);
-    }
 
 }

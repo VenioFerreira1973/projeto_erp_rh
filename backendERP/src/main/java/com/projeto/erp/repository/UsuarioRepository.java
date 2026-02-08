@@ -1,5 +1,6 @@
 package com.projeto.erp.repository;
 
+import com.projeto.erp.dtos.UsuarioDTOResponse;
 import com.projeto.erp.modelo.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
                 WHERE u.login = :login
             """)
     Optional<Usuario> findByLoginWithPerfisAndPermissoes(@Param("login") String login);
+
 
 }

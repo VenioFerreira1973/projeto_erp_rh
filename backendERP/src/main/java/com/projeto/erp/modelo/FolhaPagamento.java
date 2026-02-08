@@ -20,8 +20,8 @@ public class FolhaPagamento {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "funcionario_id")
-    private Funcionario funcionario;
+    @JoinColumn(name = "colaborador_id")
+    private Colaborador colaborador;
 
     @Column(name = "periodo")
     private LocalDate periodo;

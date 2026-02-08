@@ -9,65 +9,77 @@
 /* Corpo e root ocupam tela toda */
 body, html, #root {
   height: 100%;
-  width: 100%;
-  background-color: #f4f5f7;
+  margin: 0;
 }
 
 /* Container principal com layout flexível, linha */
 .app-layout {
   display: flex;
-  height: 100vh; /* ocupa toda altura da tela */
+  min-height: 100vh; 
   width: 100%;
+  background-color: #f3f4f6;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
 }
 
-/* Sidebar fixo à esquerda */
+/* Sidebar fixa */
 .sidebar {
-  width: 220px;
+  width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background-color: #1f2937;
-  color: #fff;
+  color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
-/* Título do menu */
+/* Título */
 .sidebar h3 {
   margin-bottom: 30px;
   text-align: center;
   font-size: 1.5rem;
 }
 
-/* Lista do menu sem estilo default */
-.sidebar ul {
+/* Lista do menu */
+.sidebar-menu {
   list-style: none;
-  flex: 1; /* ocupa espaço para empurrar logout para baixo */
-  padding-left: 0;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
 }
 
-/* Espaço entre itens */
-.sidebar ul li {
+/* Item da lista */
+.sidebar-menu li {
   margin-bottom: 15px;
 }
 
 /* Links do menu */
-.sidebar a {
+.sidebar-menu a {
+  display: block;
+  width: 100%;                 /* 🔑 mesma largura do botão */
+  padding: 12px;
+  text-align: center;          /* centraliza texto */
   color: #cbd5e1;
   text-decoration: none;
-  display: block;
-  padding: 12px 15px;
   border-radius: 6px;
   font-weight: 500;
   transition: background-color 0.2s;
+  box-sizing: border-box;
 }
 
-.sidebar a:hover,
-.sidebar a.active {
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
   background-color: #3b82f6;
   color: white;
 }
 
 /* Botão logout */
 .sidebar button.logout {
+  width: 100%;                 /* 🔑 mesma largura do link */
   padding: 12px;
   background-color: #ef4444;
   color: white;
@@ -75,7 +87,7 @@ body, html, #root {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  margin-top: auto; /* força botão no final da sidebar */
+  margin-top: auto;            /* empurra para o final */
   transition: background-color 0.2s;
 }
 
@@ -85,17 +97,38 @@ body, html, #root {
 
 /* Conteúdo principal ao lado da sidebar */
 .main-content {
-  flex: 1; /* ocupa todo espaço restante */
-  padding: 40px;
+  flex: 1;            
+  flex-grow: 1; 
+  min-width: 0;    
+  width: 100%;   
   background-color: #f4f5f7;
-
+  padding: 20px;              
   display: flex;
   flex-direction: column;
-  align-items: center; /* centraliza horizontalmente */
-  justify-content: flex-start; /* alinha conteúdo no topo */
+  align-items: center;         
+  min-height: 100vh;           
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;          
 }
 
-/* Cartões dos funcionários */
+/* Overlay de loading (opcional, só para casos reais de fetch) */
+.loading-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; 
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(244, 245, 247, 0.8);
+  z-index: 1000;
+  font-size: 1.5rem;
+  color: #1f2937;
+  pointer-events: none; 
+}
+
+/* Cartões dos Colaboradores */
 .card {
   background-color: white;
   border-radius: 10px;
@@ -186,6 +219,7 @@ h2 {
 
 /* Formulários - inspirado no login-card */
 .crud-form {
+  align-self: center;
   background-color: #fff;
   padding: 20px 20px; /* menos padding */
   border-radius: 10px;
@@ -193,6 +227,17 @@ h2 {
   margin-bottom: 20px; /* menos espaçamento */
   max-width: 600px; /* menor largura */
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+}
+
+.crud-form div {
+  margin-bottom: 0; 
+}
+
+.crud-form label {
+  font-size: 14px;
 }
 
 .crud-form h3 {
@@ -236,15 +281,27 @@ h2 {
   background-color: #2563eb;
 }
 
+.table-container {
+  width: 100%;
+  max-width: 100%; 
+  overflow-x: auto;  
+  margin-top: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+}
+
 /* Tabela estilizada - menor e fonte reduzida */
 .crud-table {
   width: 100%;
+  min-width: 1000px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  font-size: 0.9rem; /* fonte menor */
+  font-size: 0.9rem; 
 }
 
 .crud-table th,
@@ -263,50 +320,56 @@ h2 {
   background-color: #f9fafb;
 }
 
-.crud-table button.edit,
-.crud-table button.delete {
-  width: 30px;
-  height: 30px;
-  padding: 0;
+.crud-form .checkbox-group {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: center; 
+  gap: 8px;            
+  margin-bottom: 15px; 
 }
 
-.crud-table button.edit {
-  background-color: #3b82f6;
+.crud-form .checkbox-group input[type="checkbox"] {
+  width: auto;         
+  margin-bottom: 0;    
+  cursor: pointer;
 }
 
-.crud-table button.delete {
-  background-color: #ef4444;
+.crud-form .checkbox-group label {
+  margin-bottom: 0;    
+  cursor: pointer;
+  user-select: none;   
+  
 }
 
-.crud-table button.edit:hover {
-  background-color: #2563eb;
+.crud-form .date-group-container {
+  display: flex;
+  gap: 15px;          
+  margin-bottom: 15px;
+  width: 100%;
 }
 
-.crud-table button.delete:hover {
-  background-color: #dc2626;
+.crud-form .date-field {
+  display: flex;
+  flex-direction: column; 
+  flex: 1;               
 }
 
-.crud-table button svg {
-  color: #fff;
-  font-size: 0.9rem;
+.crud-form .date-field label {
+  font-size: 13px;       
+  margin-bottom: 5px;     
+  font-weight: 500;
+}
+
+.crud-form .date-field input[type="date"] {
+  width: 100%;            
+  margin-bottom: 0;       
 }
 
 /* Container dos botões dentro da tabela */
-.action-buttons {
-  display: flex;          /* deixa os botões lado a lado */
-  gap: 8px;               /* espaço entre eles */
-  justify-content: center; /* centraliza horizontalmente na célula */
-}
-
-/* Botões de ação */
 .action-buttons button {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border: none;
-  border-radius: 50%;     
+  border-radius: 35%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -316,6 +379,13 @@ h2 {
   cursor: pointer;
   font-size: 16px;
 }
+
+.action-buttons {
+  display: flex;          /* deixa os botões lado a lado */
+  gap: 8px;               /* espaço entre eles */
+  justify-content: center; /* centraliza horizontalmente na célula */
+}
+
 
 .action-buttons svg {
   display: inline;
@@ -330,9 +400,8 @@ h2 {
   background-color: #ef4444;
 }
 
-button.activate {
+.action-buttons button.activate {
   background-color: #2ecc71;
-  color: white;
 }
 
 /* Hover */
@@ -344,14 +413,126 @@ button.activate {
   background-color: #dc2626;
 }
 
+.action-buttons button.activate:hover {
+  background-color: #2ecc72;
+}
+
 /* Ícone dentro do botão */
 .action-buttons button svg {
   color: #fff;
   font-size: 1rem;
 }
 
-.checkbox-gerente {
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 42px; 
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #64748b; 
   display: flex;
   align-items: center;
-  gap: 6px;
+}
+
+.password-toggle:hover {
+  color: #3b82f6; 
+}
+
+.forgot-link {
+  font-size: 0.9rem;
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.forgot-link:hover {
+  text-decoration: none;
+}
+
+/* ========================
+   Onboarding & Stepper
+   ======================== */
+
+/* Container do stepper */
+.onboarding-container {
+  width: 100%;
+  margin-top: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Stepper com destaque */
+.MuiStepper-root {
+  background-color: transparent;
+  padding: 20px 0;
+}
+
+.MuiStepLabel-root .MuiStepLabel-label {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.MuiStepLabel-root.Mui-completed .MuiStepLabel-label {
+  color: #10b981; /* verde para step concluído */
+}
+
+.MuiStepLabel-root.Mui-active .MuiStepLabel-label {
+  color: #3b82f6; /* azul para step ativo */
+  font-weight: 600;
+}
+
+/* Formulário de dados pessoais */
+.onboarding-form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+/* Inputs e selects herdam do crud-form, só ajustes específicos */
+.onboarding-form input,
+.onboarding-form select {
+  font-size: 0.95rem;
+  padding: 10px;
+}
+
+/* Botão de salvar */
+.onboarding-form button {
+  width: 200px;
+  align-self: flex-end;
+  margin-top: 15px;
+}
+
+/* Loader centralizado */
+.onboarding-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .onboarding-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .onboarding-form button {
+    width: 100%;
+  }
 }

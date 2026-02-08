@@ -1,10 +1,15 @@
 package com.projeto.erp.modelo;
 
+import com.projeto.erp.enumeracoes.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "permissao")
 public class Permissao {
@@ -22,18 +27,18 @@ public class Permissao {
     @Column(nullable = false)
     private Instant dataAlteracao;
 
-    public Permissao() {
-    }
-
-    public Permissao(String descricao) {
-
-        this.descricao = descricao;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private Status status;
 
     public Long getId() { return id; }
     public String getDescricao() { return descricao; }
     public Instant getDataCriacao() { return dataCriacao; }
     public Instant getDataAlteracao() { return dataAlteracao; }
+
+    public Permissao(String descricao){
+        this.descricao = descricao;
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -57,6 +62,12 @@ public class Permissao {
     @Override
     public int hashCode() { return Objects.hash(id); }
 
-    public void setId(Long id) { this.id = id; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public void ativar(Permissao permissao) {
+        this.status = Status.ATIVO;
+    }
+
+    public void inativar(Permissao permissao) {
+        this.status = Status.INATIVO;
+    }
 }

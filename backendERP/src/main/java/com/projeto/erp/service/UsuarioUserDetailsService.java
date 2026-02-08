@@ -38,8 +38,9 @@ public class UsuarioUserDetailsService implements UserDetailsService {
         UsuarioSecurityDTO dto = new UsuarioSecurityDTO(
                 usuario.getLogin(),
                 usuario.getSenha(),
-                usuario.isAtivo(),
-                permissoes
+                usuario.getStatus(),
+                permissoes,
+                usuario.isPrimeiroAcesso()
         );
 
         return new UsuarioUserDetails(dto);

@@ -46,11 +46,5 @@ public class PerfilController {
         return  ResponseEntity.ok(atualizado);
     }
 
-    @PreAuthorize("hasAuthority('PERFIL_ADMIN')")
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-            service.deletar(id);
-        }
-
 
 }

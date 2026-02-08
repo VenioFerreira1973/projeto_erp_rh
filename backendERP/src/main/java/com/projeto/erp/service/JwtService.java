@@ -29,6 +29,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(usuario.login())
                 .claim("permissoes", permissoes)
+                .claim("primeiroAcesso", usuario.primeiroAcesso())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
@@ -42,6 +43,15 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public boolean extrairPrimeiroAcesso(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("primeiroAcesso", Boolean.class);
     }
 
     public boolean tokenValido(String token, String login) {

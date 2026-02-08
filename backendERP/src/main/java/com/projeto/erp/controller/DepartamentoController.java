@@ -19,7 +19,7 @@ public class DepartamentoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAuthority('PERFIL_ADMIN')")
+    @PreAuthorize("hasAuthority('ESTRUTURA_READ')")
     @GetMapping
     public List<DepartamentoDTO> listar() {
         return service.listar();

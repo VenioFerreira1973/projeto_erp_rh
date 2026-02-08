@@ -1,5 +1,6 @@
 package com.projeto.erp.modelo;
 
+import com.projeto.erp.enumeracoes.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
@@ -26,6 +27,10 @@ public class Departamento {
     @Column(name = "data_alteracao", nullable = false)
     private Instant dataAlteracao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private Status status;
+
     @PrePersist
     protected void onCreate() {
         Instant now = Instant.now();
@@ -48,6 +53,14 @@ public class Departamento {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void ativar(Departamento departamento) {
+        this.status = Status.ATIVO;
+    }
+
+    public void inativar(Departamento departamento) {
+        this.status = Status.INATIVO;
     }
 }
 

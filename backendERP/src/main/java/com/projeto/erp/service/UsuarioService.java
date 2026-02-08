@@ -2,6 +2,7 @@ package com.projeto.erp.service;
 
 import com.projeto.erp.dtos.UsuarioDTORequest;
 import com.projeto.erp.dtos.UsuarioDTOResponse;
+import com.projeto.erp.enumeracoes.UsuarioStatus;
 import com.projeto.erp.mapper.UsuarioMapper;
 import com.projeto.erp.modelo.Perfil;
 import com.projeto.erp.modelo.Usuario;
@@ -10,6 +11,7 @@ import com.projeto.erp.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public List<UsuarioDTOResponse> listar(){
         List<Usuario> usuarios = repository.findAll();
 
@@ -41,6 +44,7 @@ public class UsuarioService {
         return dtos;
     }
 
+    @Transactional
     public UsuarioDTOResponse obter(Long id) {
 
         Optional<Usuario> optionalUsuario = repository.findById(id);
@@ -53,12 +57,8 @@ public class UsuarioService {
         return mapper.toDTO(usuario);
     }
 
-    public UsuarioDTOResponse cadastrar(UsuarioDTORequest dto) {
-        Usuario usuario = mapper.toEntity(dto);
-        Usuario salvo = repository.save(usuario);
-        return mapper.toDTO(salvo);
-    }
 
+    @Transactional
     public UsuarioDTOResponse atualizar(Long id, UsuarioDTORequest dto) {
 
         Usuario usuarioExistente = repository.findById(id)
@@ -74,38 +74,5 @@ public class UsuarioService {
 
         return mapper.toDTO(salvo);
     }
-
-    public void deletar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Usuário não encontrado");
-        }
-        repository.deleteById(id);
-    }
-
-    private Usuario criarUsuarioPadrao(String nomeCompleto) {
-
-        String login = gerarLogin(nomeCompleto);
-        String email = gerarEmail(nomeCompleto);
-
-        Perfil perfilFuncionario = perfilRepository.getByDescricao("FUNCIONARIO")
-                .orElseThrow(() -> new RuntimeException("Perfil FUNCIONARIO não encontrado"));
-
-        Usuario usuario = new Usuario(login, email, passwordEncoder.encode("1234"));
-        usuario.ativar();
-        usuario.adicionarPerfil(perfilFuncionario);
-
-        return repository.save(usuario);
-    }
-
-    private String gerarLogin(String nomeCompleto) {
-        String[] partes = nomeCompleto.trim().toLowerCase().split("\\s+");
-        return partes[0] + "_" + partes[partes.length - 1];
-    }
-
-    private String gerarEmail(String nomeCompleto) {
-        return gerarLogin(nomeCompleto) + "@empresa.com";
-    }
-
-
 
 }

@@ -2,6 +2,8 @@ package com.projeto.erp.details;
 
 import com.projeto.erp.dtos.PermissaoDTO;
 import com.projeto.erp.dtos.UsuarioSecurityDTO;
+import com.projeto.erp.enumeracoes.UsuarioStatus;
+import com.projeto.erp.modelo.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +39,9 @@ public class UsuarioUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return usuario.ativo();
+       if(usuario.status() == UsuarioStatus.ATIVO)
+            return true;
+       return false;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.projeto.erp.mapper.DepartamentoMapper;
 import com.projeto.erp.modelo.Departamento;
 import com.projeto.erp.repository.DepartamentoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class DepartamentoService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public List<DepartamentoDTO> listar(){
         List<Departamento> departamentos = repository.findAll();
 

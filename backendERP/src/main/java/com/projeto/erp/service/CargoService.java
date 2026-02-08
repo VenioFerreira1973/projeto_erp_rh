@@ -5,6 +5,7 @@ import com.projeto.erp.mapper.CargoMapper;
 import com.projeto.erp.modelo.Cargo;
 import com.projeto.erp.repository.CargoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class CargoService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public List<CargoDTO> listar(){
         List<Cargo> cargos = repository.findAll();
 

@@ -6,6 +6,7 @@ import com.projeto.erp.modelo.Permissao;
 import com.projeto.erp.repository.PermissaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,13 @@ public class PermissaoService {
     private final PermissaoRepository repository;
     private final PermissaoMapper mapper;
 
+
     public PermissaoService(PermissaoRepository repository, PermissaoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
 
+    @Transactional
     public List<PermissaoDTO> listar(){
         List<Permissao> permissoes = repository.findAll();
 
@@ -34,6 +37,7 @@ public class PermissaoService {
 
     }
 
+    @Transactional
     public PermissaoDTO obter(Long id) {
 
         Optional<Permissao> optionalPermissao = repository.findById(id);
@@ -46,12 +50,14 @@ public class PermissaoService {
         return mapper.toDTO(permissao);
     }
 
+    @Transactional
     public PermissaoDTO cadastrar(PermissaoDTO dto) {
         Permissao permissao = mapper.toEntity(dto);
         Permissao salvo = repository.save(permissao);
         return mapper.toDTO(salvo);
     }
 
+    @Transactional
     public PermissaoDTO atualizar(Long id, PermissaoDTO dto) {
 
         Permissao permissaoExistente = repository.findById(id)
@@ -62,13 +68,6 @@ public class PermissaoService {
         Permissao salvo = repository.save(permissaoExistente);
 
         return mapper.toDTO(salvo);
-    }
-
-    public void deletar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Permissão não encontrado");
-        }
-        repository.deleteById(id);
     }
 
 }

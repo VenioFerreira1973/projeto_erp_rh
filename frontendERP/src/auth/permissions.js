@@ -6,12 +6,13 @@ const hasAnyPermission = (user, perms) => {
 };
 
 export const permissions = {
-  funcionario: {
+  colaborador: {
     read: (user) =>
-      hasAnyPermission(user, ["FUNCIONARIO_READ", "FUNCIONARIO_ADMIN"]),
+      hasAnyPermission(user, ["COLABORADOR_READ", "COLABORADOR_ADMIN"]),
     write: (user) =>
-      hasAnyPermission(user, ["FUNCIONARIO_WRITE", "FUNCIONARIO_ADMIN"]),
-    admin: (user) => hasAnyPermission(user, ["FUNCIONARIO_ADMIN"]),
+      hasAnyPermission(user, ["COLABORADOR_WRITE", "COLABORADOR_ADMIN"]),
+    admin: (user) => hasAnyPermission(user, ["COLABORADOR_ADMIN"]),
+
   },
 
   estrutura: {
@@ -28,5 +29,12 @@ export const permissions = {
   seguranca: {
     usuarioAdmin: (user) => hasAnyPermission(user, ["USUARIO_ADMIN"]),
     perfilAdmin: (user) => hasAnyPermission(user, ["PERFIL_ADMIN"]),
+  },
+
+  onboarding: {
+    read: (user) =>
+      hasAnyPermission(user, ["ONBOARDING_READ", "ONBOARDING_WRITE"]),
+    write: (user) =>
+      hasAnyPermission(user, ["ONBOARDING_WRITE"]),
   },
 };

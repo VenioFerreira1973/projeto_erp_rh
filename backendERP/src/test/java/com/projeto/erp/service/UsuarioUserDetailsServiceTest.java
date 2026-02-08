@@ -1,5 +1,6 @@
 package com.projeto.erp.service;
 
+import com.projeto.erp.enumeracoes.UsuarioStatus;
 import com.projeto.erp.modelo.Perfil;
 import com.projeto.erp.modelo.Permissao;
 import com.projeto.erp.modelo.Usuario;
@@ -10,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Set;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Optional;
@@ -36,7 +36,7 @@ class UsuarioUserDetailsServiceTest {
         Perfil perfil = new Perfil("ADMIN");
         perfil.adicionarPermissao(perm);
 
-        Usuario usuario = new Usuario("admin", "admin@empresa.com", "senha-criptografada");
+        Usuario usuario = new Usuario("admin", "admin@empresa.com", "senha-criptografada", UsuarioStatus.ATIVO);
         usuario.adicionarPerfil(perfil);
 
         when(usuarioRepository.findByLoginWithPerfisAndPermissoes("admin"))

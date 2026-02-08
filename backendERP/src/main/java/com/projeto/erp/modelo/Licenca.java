@@ -19,8 +19,8 @@ public class Licenca {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "funcionario_id")
-    private Funcionario funcionario;
+    @JoinColumn(name = "colaborador_id")
+    private Colaborador colaborador;
 
     @Column(name = "tipo")
     private String tipo;
@@ -31,7 +31,7 @@ public class Licenca {
     @Column(name = "data_fim", nullable = false)
     private LocalDate dataFim;
 
-    @Column(name = "status")
+    @Column(name = "statuscolaborador")
     private String status;
 
     @Column(name = "data_criacao", nullable = false, updatable = false)

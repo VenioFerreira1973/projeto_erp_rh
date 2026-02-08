@@ -8,6 +8,10 @@ import org.mapstruct.*;
 public interface PerfilMapper {
 
     @Mapping(target = "permissoes", source = "permissoes")
+    @Mapping(
+            target = "ativo",
+            expression = "java(perfil.getStatus() == com.projeto.erp.enumeracoes.Status.ATIVO)"
+    )
     PerfilDTO toDTO(Perfil perfil);
 
     @Mapping(target = "permissoes", source = "permissoes")

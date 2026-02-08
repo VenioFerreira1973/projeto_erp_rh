@@ -53,7 +53,16 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/login", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/primeiro-acesso/finalizar", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/password/forgot", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/password/reset", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/password/validate", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/onboarding/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/onboarding/**", "POST")).permitAll().requestMatchers(new AntPathRequestMatcher("/api/rh/onboarding/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/rh/onboarding/**", "POST")).permitAll()
                         .anyRequest().authenticated()
+
+
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(authenticationEntryPoint)
@@ -69,7 +78,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "POSTFORM", "PUTFORM", "PATCHFORM", "HEAD", "REQUEST", "GETURI" ));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "POSTFORM", "PUTFORM", "PATCHFORM", "HEAD", "REQUEST", "GETURI"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

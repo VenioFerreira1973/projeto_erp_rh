@@ -19,7 +19,7 @@ public class CargoController {
         this.cargoService = cargoService;
     }
 
-    @PreAuthorize("hasAuthority('PERFIL_ADMIN')")
+    @PreAuthorize("hasAuthority('ESTRUTURA_READ')")
     @GetMapping
     public List<CargoDTO> listar() {
         return cargoService.listar();

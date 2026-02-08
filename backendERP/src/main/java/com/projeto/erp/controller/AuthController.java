@@ -1,6 +1,7 @@
 package com.projeto.erp.controller;
 
 import com.projeto.erp.dtos.*;
+import com.projeto.erp.enumeracoes.UsuarioStatus;
 import com.projeto.erp.modelo.Usuario;
 import com.projeto.erp.repository.UsuarioRepository;
 import com.projeto.erp.service.JwtService;
@@ -22,14 +23,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/login")
 public class AuthController {
 
-    @Autowired
     private JwtService jwtService;
 
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    public AuthController(JwtService jwtService, UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.jwtService = jwtService;
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginDTO) {
@@ -37,10 +41,10 @@ public class AuthController {
         Usuario usuario = usuarioRepository.findByLoginWithPerfisAndPermissoes(loginDTO.login())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        if (!passwordEncoder.matches(loginDTO.senha(), usuario.getSenha()) || !usuario.isAtivo()) {
+
+        if (!passwordEncoder.matches(loginDTO.senha(), usuario.getSenha()) || usuario.getStatus() == UsuarioStatus.INATIVO) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
 
         List<PermissaoDTO> permissoes = usuario.getPerfis().stream()
                 .flatMap(p -> p.getPermissoes().stream())
@@ -50,13 +54,14 @@ public class AuthController {
         UsuarioSecurityDTO dto = new UsuarioSecurityDTO(
                 usuario.getLogin(),
                 usuario.getSenha(),
-                usuario.isAtivo(),
-                permissoes
+                usuario.getStatus(),
+                permissoes,
+                usuario.isPrimeiroAcesso()
         );
 
         UsuarioSecurityResponse usuarioSecurityResponse = new UsuarioSecurityResponse(
                 usuario.getLogin(),
-                usuario.isAtivo(),
+                usuario.getStatus(),
                 permissoes
         );
 
@@ -64,7 +69,8 @@ public class AuthController {
 
         LoginResponse loginResponse = new LoginResponse(
                 token,
-                usuarioSecurityResponse
+                usuarioSecurityResponse,
+                usuario.isPrimeiroAcesso()
         );
 
         return ResponseEntity.ok(loginResponse);

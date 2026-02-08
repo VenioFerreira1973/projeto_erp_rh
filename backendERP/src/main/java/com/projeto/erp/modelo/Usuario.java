@@ -1,5 +1,6 @@
 package com.projeto.erp.modelo;
 
+import com.projeto.erp.enumeracoes.UsuarioStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.Set;
 import java.time.Instant;
 import java.util.Objects;
 
+@Setter
 @Entity
 @Table(name = "usuario")
 public class Usuario {
@@ -18,14 +20,18 @@ public class Usuario {
     @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "email_pessoal", unique = true, nullable = false)
+    private String emailPessoal;
 
     @Column(name = "senha", nullable = false)
     private String senha;
 
-    @Column(name = "ativo", nullable = false)
-    private boolean ativo = true;
+    @Column(name = "primeiro_acesso", nullable = false)
+    private boolean primeiroAcesso;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "usuario_status", nullable = false, length = 20)
+    private UsuarioStatus status;
 
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private Instant dataCriacao;
@@ -43,19 +49,23 @@ public class Usuario {
 
     public Usuario(){}
 
-    public Usuario(String login, String email, String senha) {
+    public Usuario(String login, String emailPessoal, String senha, UsuarioStatus status) {
         this.login = login;
-        this.email = email;
+        this.emailPessoal = emailPessoal;
         this.senha = senha;
-        this.ativo = true;
+        this.status = UsuarioStatus.ATIVO;
     }
 
-    public void alterarLogin(String login) {
-        this.login = login;
+    public void marcarPrimeiroAcesso(){this.primeiroAcesso = true;}
+
+    public void desmarcarPrimeiroAcesso(){this.primeiroAcesso = false;}
+
+    public boolean isPrimeiroAcesso() {
+        return primeiroAcesso;
     }
 
-    public void alterarEmail(String email) {
-        this.email = email;
+    public void alterarEmailPessoal(String emailPessoal) {
+        this.emailPessoal = emailPessoal;
     }
 
     public void alterarSenha(String senhaCriptografada) {
@@ -63,11 +73,11 @@ public class Usuario {
     }
 
     public void ativar() {
-        this.ativo = true;
+        this.status = UsuarioStatus.ATIVO;
     }
 
     public void desativar() {
-        this.ativo = false;
+        this.status = UsuarioStatus.INATIVO;
     }
 
     public void adicionarPerfil(Perfil perfil) {
@@ -85,6 +95,10 @@ public class Usuario {
         }
     }
 
+    public boolean isAtivo() {
+        return this.status == UsuarioStatus.ATIVO;
+    }
+
     public Long getId() {
         return id;
     }
@@ -93,17 +107,15 @@ public class Usuario {
         return login;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailPessoal() {
+        return emailPessoal;
     }
 
     public String getSenha() {
         return senha;
     }
 
-    public boolean isAtivo() {
-        return ativo;
-    }
+    public UsuarioStatus getStatus() { return status; }
 
     public Instant getDataCriacao() {
         return dataCriacao;

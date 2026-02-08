@@ -1,11 +1,18 @@
 package com.projeto.erp.modelo;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.projeto.erp.enumeracoes.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "perfil")
 public class Perfil {
@@ -17,9 +24,6 @@ public class Perfil {
     @Column(unique = true, nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
-    private boolean ativo = true;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "perfil_permissao",
@@ -28,11 +32,32 @@ public class Perfil {
     )
     private Set<Permissao> permissoes = new HashSet<>();
 
-    public Perfil(){}
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private Instant dataCriacao;
 
-    public Perfil(String descricao) {
+    @Column(name = "data_alteracao", nullable = false)
+    private Instant dataAlteracao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private Status status;
+
+    public Perfil(String descricao){
         this.descricao = descricao;
-        this.ativo = true;
+    }
+
+
+
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        this.dataCriacao = now;
+        this.dataAlteracao = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.dataAlteracao = Instant.now();
     }
 
     public void adicionarPermissao(Permissao p) { this.permissoes.add(p); }
@@ -40,8 +65,10 @@ public class Perfil {
 
     public Long getId() { return id; }
     public String getDescricao() { return descricao; }
-    public boolean isAtivo() { return ativo; }
     public Set<Permissao> getPermissoes() { return permissoes; }
+    public Status getStatus() {
+        return status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -52,4 +79,12 @@ public class Perfil {
 
     @Override
     public int hashCode() { return Objects.hash(id); }
+
+    public void ativar(Perfil perfil) {
+        this.status = Status.ATIVO;
+    }
+
+    public void inativar(Perfil perfil) {
+        this.status = Status.INATIVO;
+    }
 }

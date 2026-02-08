@@ -5,11 +5,10 @@ import { permissions } from "../auth/permissions";
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, logout, primeiroAcesso } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    logout();
     navigate("/");
   };
 
@@ -17,35 +16,65 @@ function Sidebar() {
     <div className="sidebar">
       <h3>Menu</h3>
 
-      <ul>
-        <li>
-          <Link
-            to="/home"
-            className={location.pathname === "/home" ? "active" : ""}
-          >
-            Página Inicial
-          </Link>
-        </li>
-
-        {/* 🔐 Funcionários → somente ADMIN */}
-        {permissions.funcionario.admin(user) && (
+      <ul className="sidebar-menu">
+        {!primeiroAcesso && (
           <li>
             <Link
-              to="/funcionarios"
+              to="/home"
+              className={location.pathname === "/home" ? "active" : ""}
+            >
+              Página Inicial
+            </Link>
+          </li>
+        )}
+
+        {permissions.colaborador.admin(user) && (
+          <li>
+            <Link
+              to="/colaboradores"
               className={
-                location.pathname === "/funcionarios" ? "active" : ""
+                location.pathname === "/colaboradores" ? "active" : ""
               }
             >
-              Funcionários
+              Candidato
+            </Link>
+          </li>
+        )}
+
+        {/* 🧭 Onboarding */}
+        {primeiroAcesso && (
+          <li className="onboarding-item">
+            <Link
+              to="/onboarding"
+              className={
+                location.pathname.startsWith("/onboarding") ? "active" : ""
+              }
+            >
+              Onboarding
+            </Link>
+          </li>
+        )}
+
+        {permissions.onboarding.write(user) && (
+          <li>
+            <Link
+              to="/rh/onboarding"
+              className={location.pathname.startsWith("/rh/onboarding") ? "active" : ""              }
+            >
+              Validação RH
             </Link>
           </li>
         )}
       </ul>
+    
+      
+
 
       <button className="logout" onClick={handleLogout}>
         Logout
       </button>
     </div>
+
   );
 }
 
