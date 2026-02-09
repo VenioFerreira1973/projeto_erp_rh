@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../config/api";
 
 const esqueciSenhaService = {
   esqueciSenha: async (login: string): Promise<void> => {

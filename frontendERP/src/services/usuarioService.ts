@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../config/api";
 
 export interface Usuario {
   id?: number;
@@ -10,9 +10,9 @@ export interface Usuario {
 
 const usuarioService = {
 
-    get: async (id: number): Promise<Usuario> => {
-        const response = await api.get("/usuarios");
-        return response.data;
+    get: async (_id: number): Promise<Usuario> => {
+      const response = await api.get("/usuarios");
+      return response.data;
     },
 }
 export default usuarioService;
